@@ -22,21 +22,20 @@ import { formatDate } from "@payloadcms/ui/utilities/formatDate";
 import { SelectRow } from "@payloadcms/ui/elements/SelectRow";
 import { SelectAll } from "@payloadcms/ui/elements/SelectAll";
 
-// import Meta from "payload/dist/admin/components/utilities/Meta";
-// import type { Props } from "payload/dist/admin/components/views/collections/List/types";
-
-import classes from "./MediaList.module.scss";
 import { Media } from "../../types";
 import { getTranslation } from "@payloadcms/translations";
 
-const baseClass = "collection-list";
+import "./MediaGrid.scss";
 
-export const MediaListClient = (props: any) => {
+const payloadBaseClass = "collection-list";
+const baseClass = "media-grid";
+
+const MediaGridClient = (props: any) => {
 	const {
 		data,
-		collection: {
-			labels: { plural: pluralLabel, singular: singularLabel },
-		},
+		// collection: {
+		// 	labels: { plural: pluralLabel, singular: singularLabel },
+		// },
 		limit,
 		collection,
 		handlePageChange,
@@ -63,41 +62,48 @@ export const MediaListClient = (props: any) => {
 		routes: { admin: adminRoute },
 	} = useConfig();
 
+	console.log(data);
+
 	return (
-		<div className="collection-list">
+		<div className={baseClass}>
 			{/* <Meta title={getTranslation(collection.labels.plural, i18n)} /> */}
 			<SelectionProvider docs={data.docs} totalDocs={data.totalDocs}>
 				<Gutter className={`${baseClass}__wrap`}>
-					<header className={`${baseClass}__header`}>
+					<header className={`${payloadBaseClass}__header`}>
 						{customHeader && customHeader}
 						{!customHeader && (
 							<Fragment>
 								<h1>Media</h1>
 								{hasCreatePermission && (
 									<Pill
-										aria-label={t(
-											"general:createNewLabel",
-											{
-												label: getTranslation(
-													singularLabel,
-													i18n,
-												),
-											},
-										)}
+										// TODO: translations
+										// aria-label={t(
+										// 	"general:createNewLabel",
+										// 	{
+										// 		label: getTranslation(
+										// 			singularLabel,
+										// 			i18n,
+										// 		),
+										// 	},
+										// )}
 										to={newDocumentURL}
 									>
-										{t("general:createNew")}
+										// TODO: translations
+										{/* {t("general:createNew")} */}
+										Create new
 									</Pill>
 								)}
 								{!smallBreak && (
 									<ListSelection
 										label={
-											typeof pluralLabel === "string"
-												? getTranslation(
-														pluralLabel,
-														i18n,
-													)
-												: ""
+											// TODO: translations
+											// typeof pluralLabel === "string"
+											// 	? getTranslation(
+											// 			pluralLabel,
+											// 			i18n,
+											// 		)
+											// 	: ""
+											"Media"
 										}
 									/>
 								)}
@@ -105,6 +111,7 @@ export const MediaListClient = (props: any) => {
 							</Fragment>
 						)}
 					</header>
+					{/* TODO: <ListControls/> doesnt accept collections?? */}
 					{/* <ListControls
 						collection={collection}
 						handleSearchChange={handleSearchChange}
@@ -116,7 +123,7 @@ export const MediaListClient = (props: any) => {
 						enableColumns={false}
 					/> */}
 
-					<div className={classes.SortingHeader}>
+					<div className={`${baseClass}__sorting-header`}>
 						<SelectAll />
 						<SortColumn Label="File Name" name="filename" />
 						<SortColumn Label="Alt Tag" name="alt" />
@@ -124,32 +131,23 @@ export const MediaListClient = (props: any) => {
 						<SortColumn Label="Updated At" name="updatedAt" />
 					</div>
 
-					<div className={classes.MediaGrid}>
-						{props.data.docs
-							? props.data.docs.map((doc: Media) => (
-									<Button
+					<div className={`${baseClass}__grid`}>
+						{data.docs
+							? data.docs.map((doc: Media) => (
+									// TODO: change back to payload <Button />
+									<a
 										key={doc.id}
-										className={classes.MediaGridCard}
-										el={"link"}
-										buttonStyle="none"
-										to={`${adminRoute}/collections/media/${doc.id}`}
+										className={`${baseClass}__grid-card`}
+										href={`${adminRoute}/collections/media/${doc.id}`}
 									>
-										<div
-											className={
-												classes.MediaGridCardSelect
-											}
-										>
+										<div className={`${baseClass}__select`}>
 											<SelectRow />
 										</div>
 										{doc.mimeType?.includes("image") ? (
-											doc.mimeType.includes("svg") ? (
-												<img
-													src={doc.url!}
-													className={
-														classes.MediaGridCardMedia
-													}
-												/>
-											) : null
+											<img
+												src={doc.url!}
+												className={`${baseClass}__grid-media`}
+											/>
 										) : (
 											<video
 												src={doc.url!}
@@ -158,31 +156,27 @@ export const MediaListClient = (props: any) => {
 												loop={true}
 												playsInline={true}
 												controls={false}
-												className={
-													classes.MediaGridCardMedia
-												}
+												className={`${baseClass}__grid-media`}
 											/>
 										)}
-										<div className={classes.MediaCardMeta}>
+										<div
+											className={`${baseClass}__grid-meta`}
+										>
 											<p
-												className={
-													classes.MediaGridCardTitle
-												}
+												className={`${baseClass}__grid-title`}
 											>
 												{doc.filename}
 											</p>
 											<p
-												className={
-													classes.MediaGridCardAlt
-												}
+												className={`${baseClass}__grid-alt`}
 											>
+												Alt:{" "}
 												{doc.alt || "<No Alt Text>"}
 											</p>
 											<p
-												className={
-													classes.MediaGridCardAlt
-												}
+												className={`${baseClass}__grid-alt`}
 											>
+												Updated:{" "}
 												{formatDate({
 													date: doc.updatedAt,
 													pattern: dateFormat,
@@ -190,10 +184,9 @@ export const MediaListClient = (props: any) => {
 												})}
 											</p>
 											<p
-												className={
-													classes.MediaGridCardAlt
-												}
+												className={`${baseClass}__grid-alt`}
 											>
+												Created:{" "}
 												{formatDate({
 													date: doc.createdAt,
 													pattern: dateFormat,
@@ -201,13 +194,14 @@ export const MediaListClient = (props: any) => {
 												})}
 											</p>
 										</div>
-									</Button>
+									</a>
 								))
 							: null}
 					</div>
 					{data.docs && data.docs.length > 0 && (
-						<div className={`${baseClass}__page-controls`}>
+						<div className={`${payloadBaseClass}__page-controls`}>
 							<Pagination
+								// TODO: disableHistoryChange isnt a supported pro??
 								// disableHistoryChange={modifySearchParams === false}
 								hasNextPage={data.hasNextPage}
 								hasPrevPage={data.hasPrevPage}
@@ -221,7 +215,9 @@ export const MediaListClient = (props: any) => {
 							/>
 							{data?.totalDocs > 0 && (
 								<Fragment>
-									<div className={`${baseClass}__page-info`}>
+									<div
+										className={`${payloadBaseClass}__page-info`}
+									>
 										{data.page * data.limit -
 											(data.limit - 1)}
 										-
@@ -238,6 +234,7 @@ export const MediaListClient = (props: any) => {
 											collection?.admin?.pagination
 												?.limits
 										}
+										// TODO: modifySearchParams isnt a supported prop??
 										// modifySearchParams={modifySearchParams}
 										resetPage={
 											data.totalDocs <= data.pagingCounter
@@ -245,25 +242,50 @@ export const MediaListClient = (props: any) => {
 									/>
 									{smallBreak && (
 										<div
-											className={`${baseClass}__list-selection`}
+											className={`${payloadBaseClass}__list-selection`}
 										>
 											<Fragment>
 												<ListSelection
 													label={
-														typeof pluralLabel ===
-														"string"
-															? getTranslation(
-																	pluralLabel,
-																	i18n,
-																)
-															: ""
+														// TODO: translations
+														// typeof pluralLabel ===
+														// "string"
+														// 	? getTranslation(
+														// 			pluralLabel,
+														// 			i18n,
+														// 		)
+														// 	: ""
+														"Media"
 													}
 												/>
-												{/* <div className={`${baseClass}__list-selection-actions`}>
-													<EditMany collection={collection} resetParams={resetParams} />
-													<PublishMany collection={collection} resetParams={resetParams} />
-													<UnpublishMany collection={collection} resetParams={resetParams} />
-													<DeleteMany collection={collection} resetParams={resetParams} />
+												{/* TODO: resetParams are not accepted props on <EditMany/> */}
+												{/* <div
+													className={`${baseClass}__list-selection-actions`}
+												>
+													<EditMany
+														collection={collection}
+														resetParams={
+															resetParams
+														}
+													/>
+													<PublishMany
+														collection={collection}
+														resetParams={
+															resetParams
+														}
+													/>
+													<UnpublishMany
+														collection={collection}
+														resetParams={
+															resetParams
+														}
+													/>
+													<DeleteMany
+														collection={collection}
+														resetParams={
+															resetParams
+														}
+													/>
 												</div> */}
 											</Fragment>
 										</div>
@@ -277,3 +299,5 @@ export const MediaListClient = (props: any) => {
 		</div>
 	);
 };
+
+export default MediaGridClient;

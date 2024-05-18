@@ -3,7 +3,7 @@ import type { Plugin } from "payload/config";
 import { onInitExtension } from "./onInitExtension";
 import type { PluginTypes } from "./types";
 
-import MediaList from "./components/MediaList";
+import MediaGrid from "./components/MediaGrid";
 
 export const mediaGridPlugin =
 	(pluginOptions: PluginTypes): Plugin =>
@@ -24,7 +24,7 @@ export const mediaGridPlugin =
 							List: {
 								...mediaCollection.admin?.components?.views
 									?.List,
-								Component: MediaList,
+								Component: MediaGrid,
 							},
 						},
 					},
