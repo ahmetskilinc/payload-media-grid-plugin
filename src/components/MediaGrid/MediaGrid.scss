@@ -30,7 +30,7 @@
 	&__grid-card {
 		outline-style: solid;
 		outline-width: 2px;
-		outline-color: rgb(47, 47, 47);
+		outline-color: rgb(31, 31, 31);
 		text-decoration: none;
 		text-align: left;
 		position: relative;
@@ -40,6 +40,10 @@
 	}
 
 	&__grid-card:hover {
+		outline-color: rgb(47, 47, 47);
+		.media-grid__grid-media {
+			object-fit: contain;
+		}
 		.media-grid__grid-meta {
 			background-color: rgb(47, 47, 47);
 		}
@@ -53,8 +57,8 @@
 	}
 
 	&__grid-media {
-		object-fit: contain;
 		aspect-ratio: 1/1;
+		object-fit: cover;
 		width: 100%;
 	}
 
@@ -83,4 +87,20 @@
 		margin-bottom: 0;
 		opacity: 0.5;
 	}
+
+	&__square-media {
+		margin-bottom: 0;
+
+		.field-label {
+			padding-bottom: 0 !important;
+		}
+	}
+}
+
+.media__square {
+	object-fit: cover;
+}
+
+.media__aspect {
+	object-fit: contain;
 }
