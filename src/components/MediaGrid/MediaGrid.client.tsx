@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import { useWindowInfo } from "@payloadcms/ui/elements/WindowInfo";
 import { DeleteMany } from "@payloadcms/ui/elements/DeleteMany";
 import { EditMany } from "@payloadcms/ui/elements/EditMany";
@@ -21,6 +21,9 @@ import { useTranslation } from "@payloadcms/ui/providers/Translation";
 import { formatDate } from "@payloadcms/ui/utilities/formatDate";
 import { SelectRow } from "@payloadcms/ui/elements/SelectRow";
 import { SelectAll } from "@payloadcms/ui/elements/SelectAll";
+
+// TODO: DEFAULT LSIT FOR SELECTING EXISTING MEDIA. BUT NOT EXPORTED YET
+// import DefaultList from "@payloadcms/ui/";
 
 import { Media } from "../../types";
 import { getTranslation } from "@payloadcms/translations";
@@ -51,6 +54,18 @@ const MediaGridClient = (props: any) => {
 		customHeader,
 	} = props;
 
+	console.log(props);
+
+	// TODO: DEFAULT LSIT FOR SELECTING EXISTING MEDIA
+	if (customHeader != null) {
+		// return <DefaultList {...props} />;
+		return (
+			<div>
+				<h1>Hello World</h1>
+			</div>
+		);
+	}
+
 	const {
 		breakpoints: { s: smallBreak },
 	} = useWindowInfo();
@@ -62,54 +77,49 @@ const MediaGridClient = (props: any) => {
 		routes: { admin: adminRoute },
 	} = useConfig();
 
-	console.log(data);
-
 	return (
 		<div className={baseClass}>
 			{/* <Meta title={getTranslation(collection.labels.plural, i18n)} /> */}
 			<SelectionProvider docs={data.docs} totalDocs={data.totalDocs}>
 				<Gutter className={`${baseClass}__wrap`}>
 					<header className={`${payloadBaseClass}__header`}>
-						{customHeader && customHeader}
-						{!customHeader && (
-							<Fragment>
-								<h1>Media</h1>
-								{hasCreatePermission && (
-									<Pill
+						<Fragment>
+							<h1>Media</h1>
+							{hasCreatePermission && (
+								<Pill
+									// TODO: translations
+									// aria-label={t(
+									// 	"general:createNewLabel",
+									// 	{
+									// 		label: getTranslation(
+									// 			singularLabel,
+									// 			i18n,
+									// 		),
+									// 	},
+									// )}
+									to={newDocumentURL}
+								>
+									{/* TODO: translations */}
+									{/* {t("general:createNew")} */}
+									Create new
+								</Pill>
+							)}
+							{!smallBreak && (
+								<ListSelection
+									label={
 										// TODO: translations
-										// aria-label={t(
-										// 	"general:createNewLabel",
-										// 	{
-										// 		label: getTranslation(
-										// 			singularLabel,
+										// typeof pluralLabel === "string"
+										// 	? getTranslation(
+										// 			pluralLabel,
 										// 			i18n,
-										// 		),
-										// 	},
-										// )}
-										to={newDocumentURL}
-									>
-										// TODO: translations
-										{/* {t("general:createNew")} */}
-										Create new
-									</Pill>
-								)}
-								{!smallBreak && (
-									<ListSelection
-										label={
-											// TODO: translations
-											// typeof pluralLabel === "string"
-											// 	? getTranslation(
-											// 			pluralLabel,
-											// 			i18n,
-											// 		)
-											// 	: ""
-											"Media"
-										}
-									/>
-								)}
-								{!smallBreak && <ListSelection label={""} />}
-							</Fragment>
-						)}
+										// 		)
+										// 	: ""
+										"Media"
+									}
+								/>
+							)}
+							{!smallBreak && <ListSelection label={""} />}
+						</Fragment>
 					</header>
 					{/* TODO: <ListControls/> doesnt accept collections?? */}
 					{/* <ListControls
@@ -122,7 +132,7 @@ const MediaGridClient = (props: any) => {
 						titleField={titleField}
 						enableColumns={false}
 					/> */}
-
+					{!customHeader}
 					<div className={`${baseClass}__sorting-header`}>
 						<SelectAll />
 						<SortColumn Label="File Name" name="filename" />
@@ -130,7 +140,6 @@ const MediaGridClient = (props: any) => {
 						<SortColumn Label="Created At" name="createdAt" />
 						<SortColumn Label="Updated At" name="updatedAt" />
 					</div>
-
 					<div className={`${baseClass}__grid`}>
 						{data.docs
 							? data.docs.map((doc: Media) => (
@@ -170,13 +179,11 @@ const MediaGridClient = (props: any) => {
 											<p
 												className={`${baseClass}__grid-alt`}
 											>
-												Alt:{" "}
 												{doc.alt || "<No Alt Text>"}
 											</p>
 											<p
 												className={`${baseClass}__grid-alt`}
 											>
-												Updated:{" "}
 												{formatDate({
 													date: doc.updatedAt,
 													pattern: dateFormat,
@@ -186,7 +193,6 @@ const MediaGridClient = (props: any) => {
 											<p
 												className={`${baseClass}__grid-alt`}
 											>
-												Created:{" "}
 												{formatDate({
 													date: doc.createdAt,
 													pattern: dateFormat,
