@@ -7,6 +7,9 @@ import MediaGrid from "./components/MediaGrid";
 export const mediaGridPlugin =
 	(pluginOptions: PluginTypes): Plugin =>
 	(incomingConfig) => {
+		if (pluginOptions.enabled === false) {
+			return incomingConfig;
+		}
 		const collectionsToShowGrid: PluginTypes["collections"] =
 			Object.entries(pluginOptions.collections).reduce(
 				(acc, [slug]) => ({
