@@ -1,70 +1,70 @@
 "use client";
 
-import React, { Fragment, useState } from "react";
-import { useWindowInfo } from "@payloadcms/ui/elements/WindowInfo";
+import { getTranslation } from "@payloadcms/translations";
+import { Button } from "@payloadcms/ui/elements/Button";
 import { DeleteMany } from "@payloadcms/ui/elements/DeleteMany";
 import { EditMany } from "@payloadcms/ui/elements/EditMany";
 import { Gutter } from "@payloadcms/ui/elements/Gutter";
 import { ListControls } from "@payloadcms/ui/elements/ListControls";
 import { ListSelection } from "@payloadcms/ui/elements/ListSelection";
-import { SortColumn } from "@payloadcms/ui/elements/SortColumn";
 import { Pagination } from "@payloadcms/ui/elements/Pagination";
 import { PerPage } from "@payloadcms/ui/elements/PerPage";
 import { Pill } from "@payloadcms/ui/elements/Pill";
 import { PublishMany } from "@payloadcms/ui/elements/PublishMany";
-import { UnpublishMany } from "@payloadcms/ui/elements/UnpublishMany";
-import { ViewDescription } from "@payloadcms/ui/elements/ViewDescription";
-import { Button } from "@payloadcms/ui/elements/Button";
-import { SelectionProvider } from "@payloadcms/ui/providers/Selection";
-import { useConfig } from "@payloadcms/ui/providers/Config";
-import { useTranslation } from "@payloadcms/ui/providers/Translation";
-import { formatDate } from "@payloadcms/ui/utilities/formatDate";
-import { SelectRow } from "@payloadcms/ui/elements/SelectRow";
 import { SelectAll } from "@payloadcms/ui/elements/SelectAll";
-
-// TODO: DEFAULT LSIT FOR SELECTING EXISTING MEDIA. BUT NOT EXPORTED YET
-// import DefaultList from "@payloadcms/ui/";
-
+import { SortColumn } from "@payloadcms/ui/elements/SortColumn";
+import { useStepNav } from "@payloadcms/ui/elements/StepNav";
+import { UnpublishMany } from "@payloadcms/ui/elements/UnpublishMany";
+import { useWindowInfo } from "@payloadcms/ui/elements/WindowInfo";
+import { SetViewActions } from "@payloadcms/ui/providers/Actions";
+import { useComponentMap } from "@payloadcms/ui/providers/ComponentMap";
+import { useConfig } from "@payloadcms/ui/providers/Config";
+import { useListInfo } from "@payloadcms/ui/providers/ListInfo";
+import { useListQuery } from "@payloadcms/ui/providers/ListQuery";
+import { useSearchParams } from "@payloadcms/ui/providers/SearchParams";
+import { SelectionProvider } from "@payloadcms/ui/providers/Selection";
+import { useTranslation } from "@payloadcms/ui/providers/Translation";
+import type { CollectionComponentMap } from "@payloadcms/ui/utilities/buildComponentMap";
+import { formatDate } from "@payloadcms/ui/utilities/formatDate";
+import Link from "next/link";
+import { formatFilesize, isNumber } from "payload/utilities";
+import React, { Fragment, useEffect } from "react";
 import { Media } from "../../types";
-import { getTranslation } from "@payloadcms/translations";
 
 import "./MediaGrid.scss";
 
 const payloadBaseClass = "collection-list";
 const baseClass = "media-grid";
 
-const MediaGridClient = (props: any) => {
+const MediaGridClient = () => {
+	const { setStepNav } = useStepNav();
+
+	useEffect(() => {
+		setStepNav([
+			{
+				label: "Media",
+			},
+		]);
+	}, [setStepNav]);
+
+	const { getComponentMap } = useComponentMap();
+
+	const { Header, collectionSlug, hasCreatePermission, newDocumentURL } =
+		useListInfo();
+
+	const componentMap = getComponentMap({
+		collectionSlug,
+	}) as CollectionComponentMap;
+
 	const {
-		data,
-		// collection: {
-		// 	labels: { plural: pluralLabel, singular: singularLabel },
-		// },
-		limit,
-		collection,
-		handlePageChange,
-		handlePerPageChange,
-		handleSearchChange,
-		handleSortChange,
-		handleWhereChange,
-		hasCreatePermission,
-		modifySearchParams,
-		newDocumentURL,
-		resetParams,
-		titleField,
-		customHeader,
-	} = props;
-
-	console.log(props);
-
-	// TODO: DEFAULT LSIT FOR SELECTING EXISTING MEDIA
-	if (customHeader != null) {
-		// return <DefaultList {...props} />;
-		return (
-			<div>
-				<h1>Hello World</h1>
-			</div>
-		);
-	}
+		AfterList,
+		AfterListTable,
+		BeforeList,
+		BeforeListTable,
+		Description,
+		actionsMap,
+		fieldMap,
+	} = componentMap || {};
 
 	const {
 		breakpoints: { s: smallBreak },
@@ -72,67 +72,72 @@ const MediaGridClient = (props: any) => {
 
 	const { i18n, t } = useTranslation();
 
+	const { searchParams } = useSearchParams();
+	const { data, defaultLimit, handlePageChange, handlePerPageChange } =
+		useListQuery();
+
 	const {
 		admin: { dateFormat },
 		routes: { admin: adminRoute },
+		collections,
 	} = useConfig();
+
+	const collectionConfig = collections.find(
+		(collection) => collection.slug === collectionSlug,
+	);
+
+	const { labels } = collectionConfig!;
 
 	return (
 		<div className={baseClass}>
-			{/* <Meta title={getTranslation(collection.labels.plural, i18n)} /> */}
+			<SetViewActions actions={actionsMap?.List} />
+			{BeforeList}
 			<SelectionProvider docs={data.docs} totalDocs={data.totalDocs}>
-				<Gutter className={`${baseClass}__wrap`}>
+				<Gutter
+					className={`${payloadBaseClass}__wrap ${baseClass}__wrap`}
+				>
 					<header className={`${payloadBaseClass}__header`}>
-						<Fragment>
-							<h1>Media</h1>
-							{hasCreatePermission && (
-								<Pill
-									// TODO: translations
-									// aria-label={t(
-									// 	"general:createNewLabel",
-									// 	{
-									// 		label: getTranslation(
-									// 			singularLabel,
-									// 			i18n,
-									// 		),
-									// 	},
-									// )}
-									to={newDocumentURL}
-								>
-									{/* TODO: translations */}
-									{/* {t("general:createNew")} */}
-									Create new
-								</Pill>
-							)}
-							{!smallBreak && (
-								<ListSelection
-									label={
-										// TODO: translations
-										// typeof pluralLabel === "string"
-										// 	? getTranslation(
-										// 			pluralLabel,
-										// 			i18n,
-										// 		)
-										// 	: ""
-										"Media"
-									}
-								/>
-							)}
-							{!smallBreak && <ListSelection label={""} />}
-						</Fragment>
+						{Header || (
+							<Fragment>
+								<h1>{getTranslation(labels?.plural, i18n)}</h1>
+								{hasCreatePermission && (
+									<Pill
+										aria-label={i18n.t(
+											"general:createNewLabel",
+											{
+												label: getTranslation(
+													labels?.singular,
+													i18n,
+												),
+											},
+										)}
+										to={newDocumentURL}
+									>
+										{i18n.t("general:createNew")}
+									</Pill>
+								)}
+								{!smallBreak && (
+									<ListSelection
+										label={getTranslation(
+											collectionConfig!.labels.plural,
+											i18n,
+										)}
+									/>
+								)}
+								{Description && (
+									<div className={`${baseClass}__sub-header`}>
+										{Description}
+									</div>
+								)}
+							</Fragment>
+						)}
 					</header>
-					{/* TODO: <ListControls/> doesnt accept collections?? */}
-					{/* <ListControls
-						collection={collection}
-						handleSearchChange={handleSearchChange}
-						handleSortChange={handleSortChange}
-						handleWhereChange={handleWhereChange}
-						modifySearchQuery={modifySearchParams}
-						resetParams={resetParams}
-						titleField={titleField}
+					<ListControls
+						collectionConfig={collectionConfig!}
+						fieldMap={fieldMap}
 						enableColumns={false}
-					/> */}
-					{!customHeader}
+					/>
+					{BeforeListTable}
 					<div className={`${baseClass}__sorting-header`}>
 						<SelectAll />
 						<SortColumn Label="File Name" name="filename" />
@@ -143,14 +148,21 @@ const MediaGridClient = (props: any) => {
 					<div className={`${baseClass}__grid`}>
 						{data.docs
 							? data.docs.map((doc: Media) => (
-									// TODO: change back to payload <Button />
-									<a
+									<Button
 										key={doc.id}
 										className={`${baseClass}__grid-card`}
-										href={`${adminRoute}/collections/media/${doc.id}`}
+										to={`${adminRoute}/collections/media/${doc.id}`}
+										el="link"
+										Link={Link}
+										buttonStyle="none"
 									>
 										<div className={`${baseClass}__select`}>
-											<SelectRow />
+											{/*
+												TODO: Selecting single row doesnt work as cant provide ID to it
+												previous was: <SelectRow id={doc.id} />
+												And Select not working inside Next Link component
+											*/}
+											{/* <SelectRow /> */}
 										</div>
 										{doc.mimeType?.includes("image") ? (
 											<img
@@ -171,24 +183,19 @@ const MediaGridClient = (props: any) => {
 										<div
 											className={`${baseClass}__grid-meta`}
 										>
-											<p
-												className={`${baseClass}__grid-title`}
-											>
-												{doc.filename}
+											<p>
+												<span
+													className={`${baseClass}__grid-title`}
+												>
+													{doc.filename}
+												</span>
+												{" - "}
+												{formatFilesize(doc.filesize!)}
 											</p>
 											<p
 												className={`${baseClass}__grid-alt`}
 											>
 												{doc.alt || "<No Alt Text>"}
-											</p>
-											<p
-												className={`${baseClass}__grid-alt`}
-											>
-												{formatDate({
-													date: doc.updatedAt,
-													pattern: dateFormat,
-													i18n: i18n,
-												})}
 											</p>
 											<p
 												className={`${baseClass}__grid-alt`}
@@ -200,23 +207,22 @@ const MediaGridClient = (props: any) => {
 												})}
 											</p>
 										</div>
-									</a>
+									</Button>
 								))
 							: null}
 					</div>
+					{AfterListTable}
 					{data.docs && data.docs.length > 0 && (
 						<div className={`${payloadBaseClass}__page-controls`}>
 							<Pagination
-								// TODO: disableHistoryChange isnt a supported pro??
-								// disableHistoryChange={modifySearchParams === false}
 								hasNextPage={data.hasNextPage}
 								hasPrevPage={data.hasPrevPage}
 								limit={data.limit}
-								nextPage={data.nextPage}
+								nextPage={data.nextPage!}
 								numberOfNeighbors={1}
 								onChange={handlePageChange}
 								page={data.page}
-								prevPage={data.prevPage}
+								prevPage={data.prevPage!}
 								totalPages={data.totalPages}
 							/>
 							{data?.totalDocs > 0 && (
@@ -224,24 +230,26 @@ const MediaGridClient = (props: any) => {
 									<div
 										className={`${payloadBaseClass}__page-info`}
 									>
-										{data.page * data.limit -
+										{data.page! * data.limit -
 											(data.limit - 1)}
 										-
 										{data.totalPages > 1 &&
 										data.totalPages !== data.page
-											? data.limit * data.page
+											? data.limit * data.page!
 											: data.totalDocs}{" "}
 										{t("general:of")} {data.totalDocs}
 									</div>
 									<PerPage
 										handleChange={handlePerPageChange}
-										limit={limit}
-										limits={
-											collection?.admin?.pagination
-												?.limits
+										limit={
+											isNumber(searchParams?.limit)
+												? Number(searchParams.limit)
+												: defaultLimit!
 										}
-										// TODO: modifySearchParams isnt a supported prop??
-										// modifySearchParams={modifySearchParams}
+										limits={
+											collectionConfig?.admin?.pagination
+												?.limits!
+										}
 										resetPage={
 											data.totalDocs <= data.pagingCounter
 										}
@@ -253,46 +261,40 @@ const MediaGridClient = (props: any) => {
 											<Fragment>
 												<ListSelection
 													label={
-														// TODO: translations
-														// typeof pluralLabel ===
-														// "string"
-														// 	? getTranslation(
-														// 			pluralLabel,
-														// 			i18n,
-														// 		)
-														// 	: ""
-														"Media"
+														typeof labels.plural ===
+														"string"
+															? getTranslation(
+																	labels.plural,
+																	i18n,
+																)
+															: ""
 													}
 												/>
-												{/* TODO: resetParams are not accepted props on <EditMany/> */}
-												{/* <div
+												<div
 													className={`${baseClass}__list-selection-actions`}
 												>
 													<EditMany
-														collection={collection}
-														resetParams={
-															resetParams
+														collection={
+															collectionConfig!
 														}
+														fieldMap={fieldMap}
 													/>
 													<PublishMany
-														collection={collection}
-														resetParams={
-															resetParams
+														collection={
+															collectionConfig!
 														}
 													/>
 													<UnpublishMany
-														collection={collection}
-														resetParams={
-															resetParams
+														collection={
+															collectionConfig!
 														}
 													/>
 													<DeleteMany
-														collection={collection}
-														resetParams={
-															resetParams
+														collection={
+															collectionConfig!
 														}
 													/>
-												</div> */}
+												</div>
 											</Fragment>
 										</div>
 									)}
@@ -302,6 +304,7 @@ const MediaGridClient = (props: any) => {
 					)}
 				</Gutter>
 			</SelectionProvider>
+			{AfterList}
 		</div>
 	);
 };

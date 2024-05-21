@@ -250,3 +250,5 @@ dev/src/uploads
 
 
 /dev/media
+
+.npmignore

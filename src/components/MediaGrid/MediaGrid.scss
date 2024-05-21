@@ -32,18 +32,19 @@
 		outline-width: 2px;
 		outline-color: rgb(31, 31, 31);
 		text-decoration: none;
+		transition: ease-in-out 240ms;
 		text-align: left;
+		background: none;
 		position: relative;
-		display: flex !important;
-		flex-direction: column;
-		justify-content: space-between;
+		.btn__content > .btn__label {
+			display: flex !important;
+			flex-flow: column;
+			justify-content: space-between;
+		}
 	}
 
 	&__grid-card:hover {
 		outline-color: rgb(47, 47, 47);
-		.media-grid__grid-media {
-			object-fit: contain;
-		}
 		.media-grid__grid-meta {
 			background-color: rgb(47, 47, 47);
 		}
@@ -53,22 +54,21 @@
 		position: absolute;
 		top: 8px;
 		left: 8px;
-		z-index: 10;
+		z-index: 99;
 	}
 
 	&__grid-media {
 		aspect-ratio: 1/1;
 		object-fit: cover;
 		width: 100%;
+		flex: 0 1 auto;
 	}
 
 	&__grid-meta {
 		padding: 12px;
 		background-color: rgb(31, 31, 31);
-		display: flex;
-		flex-direction: column;
-		flex-grow: 1;
-		flex-shrink: 0;
+		transition: ease-in-out 240ms;
+		flex: 1 1 auto;
 	}
 
 	&__grid-title {
