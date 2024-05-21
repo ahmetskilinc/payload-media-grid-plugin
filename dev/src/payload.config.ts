@@ -17,7 +17,13 @@ export default buildConfig({
 	typescript: {
 		outputFile: path.resolve(__dirname, "payload-types.ts"),
 	},
-	plugins: [mediaGridPlugin({})],
+	plugins: [
+		mediaGridPlugin({
+			collections: {
+				[Media.slug]: true,
+			},
+		}),
+	],
 	db: mongooseAdapter({
 		url: process.env.DATABASE_URI || "",
 	}),

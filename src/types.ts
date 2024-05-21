@@ -1,4 +1,14 @@
-export interface PluginTypes {}
+export interface PluginTypes {
+	collections: Record<string, Omit<CollectionOptions, "adapter"> | true>;
+	/**
+	 * Whether or not to enable the plugin
+	 *
+	 * Default: true
+	 */
+	enabled?: boolean;
+}
+
+export interface CollectionOptions {}
 
 export interface Media {
 	id: string;
