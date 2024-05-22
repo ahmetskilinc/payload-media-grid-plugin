@@ -250,5 +250,6 @@ dev/src/uploads
 
 
 /dev/media
+/dev/briefs
 
 .npmignore
