@@ -322,7 +322,7 @@ const MediaGridClient = () => {
 													}
 												/>
 												<div
-													className={`${baseClass}__list-selection-actions`}
+													className={`${payloadBaseClass}__list-selection-actions`}
 												>
 													<EditMany
 														collection={
