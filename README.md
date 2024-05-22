@@ -1,15 +1,22 @@
 # Media grid plugin for Payload CMS
 
 > [!NOTE]
-> The package can be installed, but the styles is causing an error. Do not install yet.
+> Still under development.
+
+> [!WARNING]
+> Crashes when choosing a file from 'Choose from existing'.
 
 ## Installation
 
-```
-pnpm add payload-media-grid-plugin
-```
+#### 1. install
 
-## Usage
+`pnpm add payload-media-grid-plugin`
+
+`npm install payload-media-grid-plugin`
+
+`yarn add payload-media-grid-plugin`
+
+#### 2. add to config
 
 ```typescript
 import Media from "../collections/Media";
@@ -20,6 +27,8 @@ export default buildConfig({
   plugins: [
     mediaGridPlugin({
       collections: {
+		// Make sure you change to your collection.
+		// Add any other upload collections.
         [Media.slug]: true,
       },
     }),
