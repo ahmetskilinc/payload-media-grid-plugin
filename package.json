@@ -1,6 +1,6 @@
 {
 	"name": "payload-media-grid-plugin",
-	"version": "0.0.1",
+	"version": "0.0.4",
 	"type": "module",
 	"homepage:": "https://ahmetk.dev/",
 	"repository": "git@github.com:ahmetskilinc/payload-media-grid-plugin.git",
@@ -30,7 +30,7 @@
 	},
 	"author": "github.com/ahmetskilinc",
 	"peerDependencies": {
-		"payload": "beta"
+		"payload": "3.0.0-beta.35"
 	},
 	"devDependencies": {
 		"@payloadcms/db-mongodb": "3.0.0-beta.35",
@@ -40,6 +40,7 @@
 		"@payloadcms/ui": "3.0.0-beta.35",
 		"@swc/jest": "0.2.36",
 		"@types/jest": "29.5.12",
+		"@types/node": "20.12.12",
 		"@types/react": "18.3.2",
 		"@typescript-eslint/eslint-plugin": "7.9.0",
 		"@typescript-eslint/parser": "7.9.0",

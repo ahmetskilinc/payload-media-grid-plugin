@@ -31,7 +31,7 @@ import { formatFilesize, isNumber } from "payload/utilities";
 import React, { Fragment, useEffect } from "react";
 import { Media } from "../../types";
 
-import "./MediaGrid.scss";
+import "./MediaGrid.css";
 
 const payloadBaseClass = "collection-list";
 const baseClass = "media-grid";
@@ -51,6 +51,11 @@ const MediaGridClient = () => {
 
 	const { Header, collectionSlug, hasCreatePermission, newDocumentURL } =
 		useListInfo();
+
+	// TODO: 'fs' module not found error- probably because client component
+	// if (Header) {
+	// 	return <ListView />;
+	// }
 
 	const componentMap = getComponentMap({
 		collectionSlug,
@@ -89,7 +94,7 @@ const MediaGridClient = () => {
 	const { labels } = collectionConfig!;
 
 	return (
-		<div className={baseClass}>
+		<div className={payloadBaseClass}>
 			<SetViewActions actions={actionsMap?.List} />
 			{BeforeList}
 			<SelectionProvider docs={data.docs} totalDocs={data.totalDocs}>
@@ -125,7 +130,9 @@ const MediaGridClient = () => {
 									/>
 								)}
 								{Description && (
-									<div className={`${baseClass}__sub-header`}>
+									<div
+										className={`${payloadBaseClass}__sub-header`}
+									>
 										{Description}
 									</div>
 								)}
@@ -158,10 +165,12 @@ const MediaGridClient = () => {
 									>
 										<div className={`${baseClass}__select`}>
 											{/*
-												TODO: Selecting single row doesnt work as cant provide ID to it
-												previous was: <SelectRow id={doc.id} />
-												And Select not working inside Next Link component
-											*/}
+												// TODO: Selecting single row doesnt work as cant provide ID to it
+												// previous was: <SelectRow id={doc.id} />,
+												// now it is provided by provider.
+												//
+												// And Select not working inside Next Link component
+												*/}
 											{/* <SelectRow /> */}
 										</div>
 										{doc.mimeType?.includes("image") ? (
