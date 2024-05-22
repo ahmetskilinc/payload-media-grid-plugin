@@ -6,6 +6,7 @@ import { mongooseAdapter } from "@payloadcms/db-mongodb";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import { mediaGridPlugin } from "../../src/index";
 import sharp from "sharp";
+import ClientBriefs from "./collections/ClientBriefs";
 
 export default buildConfig({
 	secret: process.env.PAYLOAD_SECRET || "",
@@ -13,7 +14,7 @@ export default buildConfig({
 		user: Users.slug,
 	},
 	editor: lexicalEditor({}),
-	collections: [Media, Users],
+	collections: [Media, ClientBriefs, Users],
 	typescript: {
 		outputFile: path.resolve(__dirname, "payload-types.ts"),
 	},
@@ -21,6 +22,7 @@ export default buildConfig({
 		mediaGridPlugin({
 			collections: {
 				[Media.slug]: true,
+				[ClientBriefs.slug]: true,
 			},
 		}),
 	],
