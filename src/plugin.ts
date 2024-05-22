@@ -10,19 +10,12 @@ export const mediaGridPlugin =
 		if (pluginOptions.enabled === false) {
 			return incomingConfig;
 		}
-		const collectionsToShowGrid: PluginTypes["collections"] =
-			Object.entries(pluginOptions.collections).reduce(
-				(acc, [slug]) => ({
-					[slug]: {},
-				}),
-				{} as Record<string, CollectionOptions>,
-			);
 
 		const config = {
 			...incomingConfig,
 			collections: (incomingConfig.collections || []).map(
 				(collection) => {
-					if (!collectionsToShowGrid[collection.slug]) {
+					if (!pluginOptions.collections[collection.slug]) {
 						return collection;
 					}
 
