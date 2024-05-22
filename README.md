@@ -1,6 +1,7 @@
 # Media grid plugin for Payload CMS
 
-> # This will not work yet.
+> [!NOTE]
+> The package can be installed, but the styles is causing an error. Do not install yet.
 
 ## Installation
 
@@ -15,13 +16,13 @@ import Media from "../collections/Media";
 import mediaGridPlugin from "payload-media-grid-plugin";
 
 export default buildConfig({
-	collections: [Media],
-	plugins: [
-		mediaGridPlugin({
-			collections: {
-				[Media.slug]: true,
-			},
-		}),
-	],
+  collections: [Media],
+  plugins: [
+    mediaGridPlugin({
+      collections: {
+        [Media.slug]: true,
+      },
+    }),
+  ],
 });
 ```
