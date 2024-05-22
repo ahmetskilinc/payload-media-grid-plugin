@@ -1,5 +1,6 @@
 "use client";
 
+import { ListView } from "@payloadcms/next/views";
 import { getTranslation } from "@payloadcms/translations";
 import { Button } from "@payloadcms/ui/elements/Button";
 import { DeleteMany } from "@payloadcms/ui/elements/DeleteMany";
@@ -12,6 +13,7 @@ import { PerPage } from "@payloadcms/ui/elements/PerPage";
 import { Pill } from "@payloadcms/ui/elements/Pill";
 import { PublishMany } from "@payloadcms/ui/elements/PublishMany";
 import { SelectAll } from "@payloadcms/ui/elements/SelectAll";
+import { SelectRow } from "@payloadcms/ui/elements/SelectRow";
 import { SortColumn } from "@payloadcms/ui/elements/SortColumn";
 import { useStepNav } from "@payloadcms/ui/elements/StepNav";
 import { UnpublishMany } from "@payloadcms/ui/elements/UnpublishMany";
@@ -163,15 +165,12 @@ const MediaGridClient = () => {
 										Link={Link}
 										buttonStyle="none"
 									>
-										<div className={`${baseClass}__select`}>
-											{/*
-												// TODO: Selecting single row doesnt work as cant provide ID to it
-												// previous was: <SelectRow id={doc.id} />,
-												// now it is provided by provider.
-												//
-												// And Select not working inside Next Link component
-												*/}
-											{/* <SelectRow /> */}
+										<div
+											className={`${baseClass}__select`}
+											onClick={(e) => e.stopPropagation()}
+										>
+											{/* TODO: Selecting single row doesnt work as cant provide ID to it now it is provided by provider. */}
+											<SelectRow />
 										</div>
 										{doc.mimeType?.includes("image") ? (
 											<img
