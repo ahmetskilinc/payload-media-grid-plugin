@@ -1,6 +1,6 @@
 import type { Plugin } from "payload/config";
 import { onInitExtension } from "./onInitExtension";
-import type { CollectionOptions, PluginTypes } from "./types";
+import type { PluginTypes } from "./types";
 
 import MediaGrid from "./components/MediaGrid";
 
