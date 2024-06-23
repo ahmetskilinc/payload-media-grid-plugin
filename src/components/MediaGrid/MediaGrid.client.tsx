@@ -29,7 +29,7 @@ import { useTranslation } from "@payloadcms/ui/providers/Translation";
 import type { CollectionComponentMap } from "@payloadcms/ui/utilities/buildComponentMap";
 import { formatDate } from "@payloadcms/ui/utilities/formatDate";
 import Link from "next/link";
-import { formatFilesize, isNumber } from "payload/utilities";
+import { formatFilesize, isNumber } from "payload/shared";
 import React, { Fragment, useEffect } from "react";
 import { Media } from "../../types";
 
@@ -40,25 +40,10 @@ const baseClass = "media-grid";
 
 const MediaGridClient = () => {
 	const { setStepNav } = useStepNav();
-
-	useEffect(() => {
-		setStepNav([
-			{
-				label: "Media",
-			},
-		]);
-	}, [setStepNav]);
-
 	const { getComponentMap } = useComponentMap();
 
 	const { Header, collectionSlug, hasCreatePermission, newDocumentURL } =
 		useListInfo();
-
-	// TODO: 'fs' module not found error- probably because client component
-	// if (Header) {
-	// 	return <ListView />;
-	// }
-
 	const componentMap = getComponentMap({
 		collectionSlug,
 	}) as CollectionComponentMap;
@@ -94,6 +79,18 @@ const MediaGridClient = () => {
 	);
 
 	const { labels } = collectionConfig!;
+
+	// if (Header) {
+	// 	return <ListView />;
+	// }
+
+	useEffect(() => {
+		setStepNav([
+			{
+				label: "Media",
+			},
+		]);
+	}, [setStepNav]);
 
 	return (
 		<div className={payloadBaseClass}>

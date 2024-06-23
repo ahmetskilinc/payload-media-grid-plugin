@@ -1,4 +1,4 @@
-import type { Plugin } from "payload/config";
+import type { Plugin } from "payload";
 import { onInitExtension } from "./onInitExtension";
 import type { PluginTypes } from "./types";
 
