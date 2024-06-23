@@ -1,32 +1,33 @@
 "use client";
 
-import { ListView } from "@payloadcms/next/views";
 import { getTranslation } from "@payloadcms/translations";
-import { Button } from "@payloadcms/ui/elements/Button";
-import { DeleteMany } from "@payloadcms/ui/elements/DeleteMany";
-import { EditMany } from "@payloadcms/ui/elements/EditMany";
-import { Gutter } from "@payloadcms/ui/elements/Gutter";
-import { ListControls } from "@payloadcms/ui/elements/ListControls";
-import { ListSelection } from "@payloadcms/ui/elements/ListSelection";
-import { Pagination } from "@payloadcms/ui/elements/Pagination";
-import { PerPage } from "@payloadcms/ui/elements/PerPage";
-import { Pill } from "@payloadcms/ui/elements/Pill";
-import { PublishMany } from "@payloadcms/ui/elements/PublishMany";
+import {
+	Button,
+	DeleteMany,
+	EditMany,
+	Gutter,
+	ListControls,
+	ListSelection,
+	Pagination,
+	PerPage,
+	Pill,
+	PublishMany,
+	SelectionProvider,
+	SetViewActions,
+	SortColumn,
+	UnpublishMany,
+	useComponentMap,
+	useConfig,
+	useListInfo,
+	useListQuery,
+	useSearchParams,
+	useStepNav,
+	useTranslation,
+	useWindowInfo,
+	type CollectionComponentMap,
+} from "@payloadcms/ui";
 import { SelectAll } from "@payloadcms/ui/elements/SelectAll";
 import { SelectRow } from "@payloadcms/ui/elements/SelectRow";
-import { SortColumn } from "@payloadcms/ui/elements/SortColumn";
-import { useStepNav } from "@payloadcms/ui/elements/StepNav";
-import { UnpublishMany } from "@payloadcms/ui/elements/UnpublishMany";
-import { useWindowInfo } from "@payloadcms/ui/elements/WindowInfo";
-import { SetViewActions } from "@payloadcms/ui/providers/Actions";
-import { useComponentMap } from "@payloadcms/ui/providers/ComponentMap";
-import { useConfig } from "@payloadcms/ui/providers/Config";
-import { useListInfo } from "@payloadcms/ui/providers/ListInfo";
-import { useListQuery } from "@payloadcms/ui/providers/ListQuery";
-import { useSearchParams } from "@payloadcms/ui/providers/SearchParams";
-import { SelectionProvider } from "@payloadcms/ui/providers/Selection";
-import { useTranslation } from "@payloadcms/ui/providers/Translation";
-import type { CollectionComponentMap } from "@payloadcms/ui/utilities/buildComponentMap";
 import { formatDate } from "@payloadcms/ui/utilities/formatDate";
 import Link from "next/link";
 import { formatFilesize, isNumber } from "payload/shared";
