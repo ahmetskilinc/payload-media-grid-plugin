@@ -41,7 +41,7 @@ const baseClass = "media-grid";
 
 const MediaGridClient = () => {
 	const { setStepNav } = useStepNav();
-	const { getComponentMap } = useComponentMap();
+	const { getComponentMap, ListView } = useComponentMap();
 
 	const { Header, collectionSlug, hasCreatePermission, newDocumentURL } =
 		useListInfo();
@@ -81,9 +81,9 @@ const MediaGridClient = () => {
 
 	const { labels } = collectionConfig!;
 
-	// if (Header) {
-	// 	return <ListView />;
-	// }
+	if (Header) {
+		return <ListView />;
+	}
 
 	useEffect(() => {
 		setStepNav([

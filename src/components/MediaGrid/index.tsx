@@ -1,7 +1,7 @@
 import React from "react";
 import MediaGridClient from "./MediaGrid.client";
 
-const MediaGrid = () => {
+const MediaGrid = (props: any) => {
 	return <MediaGridClient />;
 };
 
